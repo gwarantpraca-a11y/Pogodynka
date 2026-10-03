@@ -26,6 +26,8 @@ OPISY_POGODY = {
     96: "burza z gradem",
     99: "silna burza z gradem",
 }
+
+
 def index(request):
     miasto = request.GET.get("miasto", "Zielona Góra")
 
@@ -71,5 +73,7 @@ def index(request):
         "opis": OPISY_POGODY.get(teraz["weather_code"], "nieznana pogoda"),
     }
     return render(request, "weather/index.html", kontekst)
+
+
 def about(request):
     return HttpResponse("Aplikacja do zmiany pogody .")
