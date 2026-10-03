@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pogodynka</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(160deg, #86fe4f, #00c6fb);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .karta {
+            background: white;
+            padding: 40px 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(182, 1, 1, 0.2);
+            width: 320px;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 0;
+            color: #1e3a5f;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 60%;
+        }
+        button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #1e089b;
+            color: white;
+            cursor: pointer;
+        }
+        .temperatura {
+            font-size: 80px;
+            font-weight: bold;
+            color: #1e3a5f;
+            margin: 16px 0 4px;
+        }
+        .opis {
+            color: #241f1f;
+        }
+        .szczegoly {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            color: #333;
+        }
+        .blad {
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="karta">
+        <h1>Pogodynka</h1>
+
+        <form method="get">
+            <input type="text" name="miasto" placeholder="Wpisz miasto">
+            <button type="submit">Sprawdź</button>
+        </form>
+
+        {% if blad %}
+            <p class="blad">{{ blad }} ({{ miasto }})</p>
+        {% else %}
+            <h2>{{ miasto }}, {{ kraj }}</h2>
+            <div class="temperatura">{{ temperatura }}°C</div>
+            <div class="opis">{{ opis }}</div>
+            <div class="szczegoly">
+                <span>💧 {{ wilgotnosc }} %</span>
+                <span>💨 {{ wiatr }} km/h</span>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
