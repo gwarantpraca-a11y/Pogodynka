@@ -1,6 +1,8 @@
 import requests
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import redirect, render
 from .models import Wyszukiwanie
 
 
@@ -86,7 +88,17 @@ def index(request):
     }
     return render(request, "weather/index.html", kontekst)
 
+def rejestracja(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            nowy = form.save()
+            login(request, nowy)
+            return redirect("index")
+    else:
+        form = UserCreationForm()
 
+    return render(request, "registration/rejestracja.html", {"form": form})
 
 def about(request):
     return HttpResponse("Aplikacja do zmiany pogody .")
