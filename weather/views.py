@@ -1,6 +1,7 @@
 import requests
 from django.http import HttpResponse
 from django.shortcuts import render
+from .models import Wyszukiwanie
 
 
 OPISY_POGODY = {
@@ -64,15 +65,27 @@ def index(request):
         kontekst = {"miasto": miasto, "blad": "Brak połączenia z serwisem pogodowym"}
         return render(request, "weather/index.html", kontekst)
 
+    opis = OPISY_POGODY.get(teraz["weather_code"], "nieznana pogoda")
+
+    if "miasto" in request.GET:
+        Wyszukiwanie.objects.create(
+            miasto=miejsce["name"],
+            temperatura=teraz["temperature_2m"],
+            opis=opis,
+            ip=request.META.get("REMOTE_ADDR"),
+            uzytkownik=request.user if request.user.is_authenticated else None,
+        )
+
     kontekst = {
         "miasto": miejsce["name"],
         "kraj": miejsce.get("country", ""),
         "temperatura": teraz["temperature_2m"],
         "wilgotnosc": teraz["relative_humidity_2m"],
         "wiatr": teraz["wind_speed_10m"],
-        "opis": OPISY_POGODY.get(teraz["weather_code"], "nieznana pogoda"),
+        "opis": opis,
     }
     return render(request, "weather/index.html", kontekst)
+
 
 
 def about(request):
