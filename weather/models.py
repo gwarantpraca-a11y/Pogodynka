@@ -19,8 +19,19 @@ class Wyszukiwanie(models.Model):
         verbose_name = "wyszukiwanie"
         verbose_name_plural = "wyszukiwania"
         ordering = ["-data"]
+class Miejscowosc(models.Model):
+    sym = models.CharField(max_length=7, unique=True)
+    nazwa = models.CharField(max_length=100, db_index=True)
+    wojewodztwo = models.CharField(max_length=30)
+    rodzaj = models.CharField(max_length=2)
 
-        
+    class Meta:
+        verbose_name = "miejscowość"
+        verbose_name_plural = "miejscowości"
+        ordering = ["nazwa"]
+
     def __str__(self):
-        return f"{self.miasto} ({timezone.localtime(self.data):%Y-%m-%d %H:%M})"
+        return f"{self.nazwa} ({self.wojewodztwo})"
+        
+    
     
