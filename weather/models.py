@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 
 class Wyszukiwanie(models.Model):
@@ -21,4 +22,5 @@ class Wyszukiwanie(models.Model):
 
         
     def __str__(self):
-        return f"{self.miasto} ({self.data:%Y-%m-%d %H:%M})"
+        return f"{self.miasto} ({timezone.localtime(self.data):%Y-%m-%d %H:%M})"
+    
