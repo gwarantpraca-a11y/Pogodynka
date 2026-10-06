@@ -1,9 +1,10 @@
 import requests
-from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from .models import Wyszukiwanie
+
+from .models import Miejscowosc, Wyszukiwanie
 
 
 OPISY_POGODY = {
@@ -111,6 +112,22 @@ def historia(request):
 
     kontekst = {"wyszukiwania": wyszukiwania[:50]}
     return render(request, "weather/historia.html", kontekst)
+def podpowiedzi(request):
+    fraza = request.GET.get("q", "").strip()
+    if len(fraza) < 2:
+      return JsonResponse({"wyniki": []})
+
+    miejscowosci = (
+        Miejscowosc.objects.filter(nazwa__istartswith=fraza)
+        .order_by("-rodzaj", "nazwa", "wojewodztwo")
+        .values("nazwa", "wojewodztwo")
+        .distinct()[:10]
+    )
+    return JsonResponse(
+        {"wyniki": list(miejscowosci)},
+        json_dumps_params={"ensure_ascii": False},
+    )
+
 
 def about(request):
     return HttpResponse("Aplikacja do zmiany pogody .")

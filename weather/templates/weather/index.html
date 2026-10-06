@@ -5,13 +5,42 @@
     <h1 class="text-3xl font-bold text-slate-800 mb-4">Pogodynka</h1>
 
     <form method="get" class="flex gap-2 mb-6">
-        <input type="text" name="miasto" placeholder="Wpisz miasto"
+        <input type="text" name="miasto" id="pole-miasto" list="lista-miejscowosci" autocomplete="off"placeholder="Wpisz miasto"
                class="flex-1 min-w-0 border border-gray-300 rounded-lg px-3 py-2">
         <button type="submit"
                 class="bg-slate-800 text-white rounded-lg px-4 py-2 hover:bg-slate-700">
             Sprawdź
         </button>
-    </form>
+    </form><datalist id="lista-miejscowosci"></datalist>
+
+<script>
+    const pole = document.getElementById("pole-miasto");
+    const lista = document.getElementById("lista-miejscowosci");
+    let czasomierz;
+
+    pole.addEventListener("input", () => {
+        clearTimeout(czasomierz);
+        czasomierz = setTimeout(async () => {
+            const fraza = pole.value.trim();
+            if (fraza.length < 2) {
+                lista.innerHTML = "";
+                return;
+            }
+            const odpowiedz = await fetch(
+                "/weather/podpowiedzi/?q=" + encodeURIComponent(fraza)
+            );
+            const dane = await odpowiedz.json();
+
+            lista.innerHTML = "";
+            for (const m of dane.wyniki) {
+                const opcja = document.createElement("option");
+                opcja.value = m.nazwa;
+                opcja.label = m.wojewodztwo;
+                lista.appendChild(opcja);
+            }
+        }, 300);
+    });
+</script>
 
     {% if blad %}
         <p class="text-red-600">{{ blad }} ({{ miasto }})</p>
