@@ -125,4 +125,9 @@ MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
+    
 }
+
+
+LOGIN_REDIRECT_URL = "/weather/"
+LOGOUT_REDIRECT_URL = "/weather/"
