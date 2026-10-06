@@ -1,0 +1,41 @@
+{% extends "weather/base.html" %}
+
+{% block tresc %}
+<div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl mx-4">
+    <h1 class="text-2xl font-bold text-slate-800 mb-1">Historia wyszukiwań</h1>
+    <p class="text-sm text-gray-500 mb-6">
+        {% if user.is_authenticated %}
+            Twoje wyszukiwania jako <b>{{ user.username }}</b>
+        {% else %}
+            Wyszukiwania z Twojego adresu IP (bez logowania)
+        {% endif %}
+    </p>
+
+    <table class="w-full text-left">
+        <thead>
+            <tr class="border-b text-gray-500 text-sm">
+                <th class="py-2">Data</th>
+                <th class="py-2">Miasto</th>
+                <th class="py-2">Temperatura</th>
+                <th class="py-2">Pogoda</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in wyszukiwania %}
+                <tr class="border-b last:border-0">
+                    <td class="py-2 text-gray-500">{{ w.data|date:"d.m.Y H:i" }}</td>
+                    <td class="py-2 font-semibold">{{ w.miasto }}</td>
+                    <td class="py-2">{{ w.temperatura }}°C</td>
+                    <td class="py-2 text-gray-500">{{ w.opis }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="py-6 text-center text-gray-500">
+                        Brak wyszukiwań. Sprawdź pogodę dla jakiegoś miasta!
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -8,6 +8,8 @@
 </head>
 <body class="min-h-screen flex flex-col bg-linear-to-br from-lime-400 to-cyan-400">
     <nav class="flex justify-end items-center gap-4 p-4 text-slate-800">
+        <a href="{% url 'index' %}" class="underline">Pogoda</a>
+        <a href="{% url 'historia' %}" class="underline">Historia</a>
         {% if user.is_authenticated %}
             <span>Zalogowany jako <b>{{ user.username }}</b></span>
             <form method="post" action="{% url 'logout' %}">

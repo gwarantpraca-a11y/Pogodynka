@@ -100,5 +100,17 @@ def rejestracja(request):
 
     return render(request, "registration/rejestracja.html", {"form": form})
 
+def historia(request):
+    if request.user.is_authenticated:
+        wyszukiwania = Wyszukiwanie.objects.filter(uzytkownik=request.user)
+    else:
+        wyszukiwania = Wyszukiwanie.objects.filter(
+            ip=request.META.get("REMOTE_ADDR"),
+            uzytkownik__isnull=True,
+        )
+
+    kontekst = {"wyszukiwania": wyszukiwania[:50]}
+    return render(request, "weather/historia.html", kontekst)
+
 def about(request):
     return HttpResponse("Aplikacja do zmiany pogody .")
